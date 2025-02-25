@@ -1,0 +1,48 @@
+name: staging-sst
+
+on:
+  push:
+    branches:
+      - staging
+
+concurrency:
+  group: ${{ github.ref }}
+
+env:
+  SST_TELEMETRY_DISABLED: "1"
+  SST_AWS_REGION: eu-central-1
+  SST_STAGE: staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            .sst
+          key: ${{ runner.os }}-sst
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "20"
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::381492246063:role/platform-staging-github
+          aws-region: ${{ env.SST_AWS_REGION }}
+
+      - run: bun install
+      - run: bun typecheck
+      - run: bun sst install
+
+      - run: |
+          bun sst deploy

@@ -1,0 +1,19 @@
+{
+  "name": "@backoffice/data",
+  "version": "1.0.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    "./electrodb": "./src/electrodb/index.ts",
+    "./dynamo/tables/core": "./src/dynamo/tables/core/index.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.682.0",
+    "electrodb": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "typescript": "^5.7.2"
+  }
+}
