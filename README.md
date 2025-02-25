@@ -1,4 +1,4 @@
-# Project Roadmap (14 Weeks)
+# Project Roadmap (14 Weeks).
 
 ## Overview
 This project focuses on building a scalable and secure platform using AWS SST, React, Tailwind, and ShadCN. The development is structured into five phases, covering learning, project setup, reporting, player management, security enhancements, and final deployment.
