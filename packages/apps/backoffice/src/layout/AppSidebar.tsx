@@ -25,7 +25,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <LayoutGrid className="w-5 h-5" />,
+    icon: <LayoutGrid className="w-5 h-5"/>,
     name: "Dashboard",
     path: "/",
   },
@@ -92,7 +92,7 @@ const AppSidebar: React.FC = () => {
   ) => (
     <ul className="flex flex-col overflow-x-hidden gap-2">
       {items.map((nav, index) => (
-        <li key={nav.name} className="flex flex-col gap-1">
+        <li key={nav.name} className="flex flex-col gap-2 justify-center w-full">
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
@@ -106,15 +106,15 @@ const AppSidebar: React.FC = () => {
                   : "lg:justify-start"
               }`}
             >
-              <span
-                className={`${
-                  openSubmenu?.type === menuType && openSubmenu?.index === index
-                    ? "menu-item-icon-active dark:text-white"
-                    : "menu-item-icon-inactive dark:text-gray-400"
-                } flex items-center`}
+            <span
+              className={`${
+                openSubmenu?.type === menuType && openSubmenu?.index === index
+                  ? "menu-item-icon-active dark:text-white"
+                  : "menu-item-icon-inactive dark:text-gray-400"
+              } flex items-center ${isExpanded || isHovered ? "" : "justify-center w-full"}`}
               >
-                {nav.icon}
-              </span>
+              {nav.icon}
+            </span>
               {(isExpanded || isHovered || isMobileOpen) && (
                 <span className={`menu-item-text dark:text-gray-400 group-hover:dark:text-white`}>{nav.name}</span>
               )}
@@ -132,24 +132,24 @@ const AppSidebar: React.FC = () => {
           ) : (
             nav.path && (
               <Link
-                href={nav.path}
-                className={`menu-item group gap-10 w-full flex items-center transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 ${
-                  isActive(nav.path) 
-                    ? "menu-item-active dark:text-white" 
-                    : "menu-item-inactive dark:text-gray-400 hover:dark:text-white"
-                }`}
-              >
+              href={nav.path}
+              className={`menu-item group gap-3 w-full flex items-center transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 ${
+                isActive(nav.path) 
+                  ? "menu-item-active dark:text-white" 
+                  : "menu-item-inactive dark:text-gray-400 hover:dark:text-white"
+              }`}
+            >
                 <span
                   className={`${
                     isActive(nav.path)
                       ? "menu-item-icon-active dark:text-white"
                       : "menu-item-icon-inactive dark:text-gray-400 group-hover:dark:text-white"
-                  } flex justify-center pr-10 items-center`}
-                >
+                    } flex items-center ${isExpanded || isHovered ? "pr-10" : "justify-center w-full"}`}
+                    >
                   {nav.icon}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className={`menu-item-text dark:text-gray-400 group-hover:dark:text-white`}>{nav.name}</span>
+                  <span className={`menu-item-text pl-2 dark:text-gray-400 group-hover:dark:text-white`}>{nav.name}</span>
                 )}
               </Link>
             )
@@ -279,19 +279,24 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
-        ${
-          isExpanded || isMobileOpen
-            ? "w-[290px]"
-            : isHovered
-            ? "w-[290px]"
-            : "w-[90px]"
-        }
-        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0`}
-      onMouseEnter={() => !isExpanded && setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    className={`fixed mt-16 flex flex-col lg:mt-0 top-0 ${
+      isExpanded || isHovered ? "px-5" : "px-3"
+    } left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      ${
+        isExpanded || isMobileOpen
+          ? "w-[290px]"
+          : isHovered
+          ? "w-[290px]"
+          : ""
+      }
+      ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+      lg:translate-x-0`}
+    style={{
+      width: isExpanded || isMobileOpen || isHovered ? "290px" : "100px"
+    }}
+    onMouseEnter={() => !isExpanded && setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+  >
       <div
         className={`py-8 items-center justify-center mt-5 mb-5 flex  ${
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
@@ -319,7 +324,7 @@ const AppSidebar: React.FC = () => {
             <Image
               src="/images/logo/logocrunch.svg"
               alt="Logo"
-              width={32}
+              width={340}
               height={32}
             />
           )}
@@ -329,7 +334,7 @@ const AppSidebar: React.FC = () => {
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
-              <h2
+            <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
@@ -339,7 +344,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <MoreHorizontal className=" flex items-center justify-center w-full h-5" />
+                  <MoreHorizontal className="flex items-center justify-center w-full h-5" />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
